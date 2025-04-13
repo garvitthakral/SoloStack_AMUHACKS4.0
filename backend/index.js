@@ -14,17 +14,18 @@ const URL = process.env.MONGO_URL;
 
 const app = express();
 
-app.use(cookieParser());
-app.use(express.json());
-app.use("/", authRoute);
-app.use("/cloths", clothRoutes);
 app.use(
   cors({
-    origin: ["http://localhost:5173/"],
+    origin: "http://localhost:5173",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
+
+app.use(express.json());
+app.use(cookieParser());
+app.use("/", authRoute);
+app.use("/cloths", clothRoutes);
 
 mongoose
   .connect(URL)
@@ -57,4 +58,8 @@ app.post("/logout", (req, res) => {
       success: true,
       message: "cookie 'token' removed & Logged out successfully",
     });
+});
+
+app.get("/", (req, res) => {
+  res.send("Backend is working");
 });
