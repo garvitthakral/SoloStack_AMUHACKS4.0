@@ -1,14 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 
 const Navbar = () => {
-  const isLoggedIn = localStorage.getItem("token");
+  const { user } = useContext(UserContext);
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    window.location.reload(); // or navigate to login
-  };
-  
+  const handleLogOut = () => {};
+
   return (
     <div className="px-40  bg-gray-800 shadow-2xl">
       <div className=" flex justify-between text-lg font-semibold">
@@ -52,22 +50,45 @@ const Navbar = () => {
           >
             Shop
           </NavLink>
-          <NavLink
-            to={"/signup"}
-            className={({ isActive }) =>
-              isActive ? "text-blue-500 font-bold" : "text-gray-300"
-            }
-          >
-            Sign up
-          </NavLink>
-          <NavLink
-            to={"/login"}
-            className={({ isActive }) =>
-              isActive ? "text-blue-500 font-bold" : "text-gray-300"
-            }
-          >
-            Log in
-          </NavLink>
+          {user?.role === "donor" && (
+            <NavLink
+              to={"/dasboard"}
+              className={({ isActive }) =>
+                isActive ? "text-blue-500 font-bold" : "text-gray-300"
+              }
+            >
+              Dashboard
+            </NavLink>
+          )}
+          {user ? (
+            <>
+              <p
+                onSubmit={handleLogOut}
+                className="text-gray-300 cursor-pointer"
+              >
+                Log out
+              </p>
+            </>
+          ) : (
+            <>
+              <NavLink
+                to={"/signup"}
+                className={({ isActive }) =>
+                  isActive ? "text-blue-500 font-bold" : "text-gray-300"
+                }
+              >
+                Sign up
+              </NavLink>
+              <NavLink
+                to={"/login"}
+                className={({ isActive }) =>
+                  isActive ? "text-blue-500 font-bold" : "text-gray-300"
+                }
+              >
+                Log in
+              </NavLink>
+            </>
+          )}
         </div>
       </div>
     </div>

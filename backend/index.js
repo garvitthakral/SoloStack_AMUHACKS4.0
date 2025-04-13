@@ -8,6 +8,7 @@ const authRoute = require("./routes/AuthRoute");
 const cookieParser = require("cookie-parser");
 const clothRoutes = require("./routes/ClothsRoute");
 const bcrypt = require("bcrypt");
+const userRoutes = require("./routes/userRoutes");
 
 const PORT = process.env.PORT || 3002;
 const URL = process.env.MONGO_URL;
@@ -26,6 +27,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use("/", authRoute);
 app.use("/cloths", clothRoutes);
+app.use("/user", userRoutes);
 
 mongoose
   .connect(URL)

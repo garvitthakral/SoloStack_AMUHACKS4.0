@@ -1,4 +1,3 @@
-import { Sidebar } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import api from "../../api/axios";
 import ShopCard from "./ShopCard";
@@ -21,8 +20,7 @@ const Shop = () => {
   }, []);
 
   return (
-    <>
-      <Sidebar />
+    <>      
       <div className="bg-gray-900 min-h-screen py-10 px-6 md:px-12">
         <h1 className="text-white text-3xl font-bold mb-8 text-center">
           All Clothes
