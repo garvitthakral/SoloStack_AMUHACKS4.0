@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:3002",
+  baseURL: "https://solostack-amuhacks4-0-backend.onrender.com",
   withCredentials: true,
 });
 
