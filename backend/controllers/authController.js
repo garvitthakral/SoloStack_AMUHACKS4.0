@@ -1,4 +1,4 @@
-const { User } = require("../models/userModel");
+const  User  = require("../models/userModel");
 const { createSecretToken } = require("../util/secretToken");
 const bcrypt = require("bcrypt");
 
@@ -19,9 +19,10 @@ module.exports.Signup = async (req, res, next) => {
     const token = createSecretToken(user._id);
     res.cookie("token", token, {
       withCredentials: true,
-      httpOnly: false,
+      httpOnly: true,
       maxAge: 7 * 24 * 60 * 60 * 1000,
-      path: "/",
+      path: "/",secure: false,
+  sameSite: "Lax"
     });
     res
       .status(201)
@@ -67,7 +68,7 @@ module.exports.Login = async (req, res) => {
       .status(201)
       .json({
         message: "User Logged in Successfully",
-        success: true,
+        success: true, user,
         redirect: "/",
       });
   } catch (error) {

@@ -1,11 +1,28 @@
 import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
+import api from "../api/axios";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
+  const navigate = useNavigate();
 
-  const handleLogOut = () => {};
+  const handleLogOut = async () => {
+    try {
+      const { data } = await api.post("/logout", {}, { withCredentials: true });
+
+      if (data.success) {
+        setUser(null);
+        toast.success("Logged out successfully!");
+        navigate("/login");
+      }
+    } catch (err) {
+      toast.error("Logout failed.");
+      console.error("Logout error:", err);
+    }
+  };
 
   return (
     <div className="px-40  bg-gray-800 shadow-2xl">
@@ -35,14 +52,6 @@ const Navbar = () => {
             About
           </NavLink>
           <NavLink
-            to={"/donator"}
-            className={({ isActive }) =>
-              isActive ? "text-blue-500 font-bold" : "text-gray-300"
-            }
-          >
-            Become A Donator
-          </NavLink>
-          <NavLink
             to={"/shop"}
             className={({ isActive }) =>
               isActive ? "text-blue-500 font-bold" : "text-gray-300"
@@ -50,7 +59,7 @@ const Navbar = () => {
           >
             Shop
           </NavLink>
-          {user?.role === "donor" && (
+          {user?.role === "donor" ? (
             <NavLink
               to={"/dasboard"}
               className={({ isActive }) =>
@@ -59,11 +68,20 @@ const Navbar = () => {
             >
               Dashboard
             </NavLink>
+          ) : (
+            <NavLink
+              to={"/donator"}
+              className={({ isActive }) =>
+                isActive ? "text-blue-500 font-bold" : "text-gray-300"
+              }
+            >
+              Become A Donator
+            </NavLink>
           )}
           {user ? (
             <>
               <p
-                onSubmit={handleLogOut}
+                onClick={handleLogOut}
                 className="text-gray-300 cursor-pointer"
               >
                 Log out

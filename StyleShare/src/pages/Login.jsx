@@ -6,7 +6,7 @@ import Loading from "./Loading";
 import { UserContext } from "../context/UserContext";
 
 const Login = () => {
-  const { setuser } = useContext(UserContext);
+  const { setUser, user } = useContext(UserContext);
   const navigate = useNavigate();
   const [inputValues, setInputValues] = useState({
     email: "",
@@ -47,7 +47,8 @@ const Login = () => {
 
       const { success, message } = data;
       if (success) {
-        setuser(user);
+        setLoading(false);
+        setUser(data.user);
         setInputValues({ email: "", password: "" });
         navigate("/");
         handleSuccess(message);
@@ -57,7 +58,7 @@ const Login = () => {
       console.log(error);
     } finally {
       setLoading(false);
-    }
+    } 
   };
   return loading ? (
     <Loading />
