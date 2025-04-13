@@ -14,11 +14,11 @@ const ClothsSchema = new mongoose.Schema ({
         enum: ['XS', 'S', 'M', 'L', 'XL'],
         required: true,
     },
-    category: {
+    category: { // Men, Women, Kids
         type: String,
         required: true,
     },
-    condition: {
+    condition: { // New, Like New, etc
         type: String,
         required: true,
     },

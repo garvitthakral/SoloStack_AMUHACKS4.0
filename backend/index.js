@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const authRoute = require("./routes/AuthRoute");
 const cookieParser = require("cookie-parser");
+const clothRoutes = require("./routes/clothRoutes");
 
 const PORT = process.env.PORT || 3002;
 const URL = process.env.MONGO_URL;
@@ -15,6 +16,7 @@ const app = express();
 app.use(cookieParser());
 app.use(express.json());
 app.use("/", authRoute);
+app.use("/cloths", clothRoutes);
 app.use(
   cors({
     origin: [""],
@@ -35,3 +37,10 @@ mongoose
   .catch((err) => {
     console.error("Database connection failed:", err);
   });
+
+
+app.post("/logout", (req, res) => {
+  const token = req.cookies.token;
+  res.clearCookie("token");
+  res.json({ success: true, message: "cookie 'token' removed" });
+})
