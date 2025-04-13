@@ -2,6 +2,13 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
+  const isLoggedIn = localStorage.getItem("token");
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    window.location.reload(); // or navigate to login
+  };
+  
   return (
     <div className="px-40  bg-gray-800 shadow-2xl">
       <div className=" flex justify-between text-lg font-semibold">
@@ -52,6 +59,14 @@ const Navbar = () => {
             }
           >
             Sign up
+          </NavLink>
+          <NavLink
+            to={"/login"}
+            className={({ isActive }) =>
+              isActive ? "text-blue-500 font-bold" : "text-gray-300"
+            }
+          >
+            Log in
           </NavLink>
         </div>
       </div>

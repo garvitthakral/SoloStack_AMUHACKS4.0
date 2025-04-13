@@ -1,4 +1,4 @@
-const { UserModel } = require("../models/userModel");
+const { User } = require("../models/userModel");
 const { createSecretToken } = require("../util/secretToken");
 const bcrypt = require("bcrypt");
 
@@ -8,14 +8,14 @@ module.exports.Signup = async (req, res, next) => {
     if (!name || !email || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
-    const exsitingUser = await UserModel.findOne({ email });
+    const exsitingUser = await User.findOne({ email });
     if (exsitingUser) {
       return res.status(409).json({
         success: false,
         message: "user with this email already exists",
       });
     }
-    const user = await UserModel.create({ email, password, name, role });
+    const user = await User.create({ email, password, name, role });
     const token = createSecretToken(user._id);
     res.cookie("token", token, {
       withCredentials: true,
@@ -45,7 +45,7 @@ module.exports.Login = async (req, res) => {
       return res.json({ message: "All feilds are required" });
     }
 
-    const user = await UserModel.findOne({ email });
+    const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: "Incorrect Username or Password" });
     }

@@ -1,8 +1,14 @@
 import React from 'react'
+import Features from './Features'
+import Team from './Team'
+
 
 const About = () => {
   return (
-    <div>About</div>
+    <div>
+      <Features />
+      <Team />
+    </div>
   )
 }
 
