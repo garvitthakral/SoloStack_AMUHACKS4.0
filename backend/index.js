@@ -51,8 +51,8 @@ app.post("/logout", (req, res) => {
 
   res.clearCookie("token", {
     httpOnly: true,
-    secure: false,
-  sameSite: "Lax",
+    secure: process.env.NODE_ENV === "production",
+  sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
   });
   res
     .status(200)
