@@ -52,9 +52,45 @@ module.exports.getAllCloths = async (req, res) => {
 
 module.exports.DeleteCloth = async (req, res) => {
   try {
-    
+    const { id } = req.params;
+
+    const cloth = await ClothsModel.findById(id);
+    if (!cloth) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Cloth not found" });
+    }
+
+    if (cloth.donor.toString() !== req.user._id.toString()) {
+      res.status(403).json({ success: false, message: "forbidden" });
+    }
+
+    const deleteCloth = await ClothsModel.findByIdAndDelete(id);
+    res.json({ success: true, message: `cloth deldted: ${deleteCloth}` });
   } catch (err) {
     console.error("while fetching all cloths details", err);
     res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+module.exports.getACloth = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const aCloth = await ClothsModel.findById(id).populate(
+      "donor",
+      "name email"
+    );
+    if (!aCloth) {
+      res
+        .status(404)
+        .json({ success: false, message: "Server error: cloth didnt found" });
+    }
+
+    res.json({ success: true, message: "here is your cloth", aCloth });
+  } catch (err) {
+    console.error("while fetching cloth details", err);
+    res
+      .status(404)
+      .json({ success: false, message: "Server error: cloth didnt found" });
   }
 };

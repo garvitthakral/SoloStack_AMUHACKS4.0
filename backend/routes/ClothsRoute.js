@@ -1,8 +1,10 @@
-const { getAllCloths, createCloth } = require("../controllers/clothController");
+const { getAllCloths, createCloth, getACloth, DeleteCloth } = require("../controllers/clothController");
 const { verifyToken } = require("../middleware/authMiddleware");
 const router = require("express").Router();
 
-router.post("/createcloth", verifyToken, createCloth);
-router.get("/allcloths", getAllCloths);
+router.get("/", getAllCloths);
+router.get("/:id", getACloth);
+router.post("/", verifyToken, createCloth);
+router.delete("/:id", verifyToken, DeleteCloth);
 
 module.exports = router;

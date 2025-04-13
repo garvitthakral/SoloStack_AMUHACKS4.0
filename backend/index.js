@@ -6,7 +6,8 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const authRoute = require("./routes/AuthRoute");
 const cookieParser = require("cookie-parser");
-const clothRoutes = require("./routes/clothRoutes");
+const clothRoutes = require("./routes/ClothsRoute");
+const bcrypt = require("bcrypt");
 
 const PORT = process.env.PORT || 3002;
 const URL = process.env.MONGO_URL;
@@ -38,9 +39,22 @@ mongoose
     console.error("Database connection failed:", err);
   });
 
-
 app.post("/logout", (req, res) => {
   const token = req.cookies.token;
-  res.clearCookie("token");
-  res.json({ success: true, message: "cookie 'token' removed" });
-})
+
+  if (!token) {
+    return res.status(400).json({ success: false, message: "No token found" });
+  }
+
+  res.clearCookie("token", {
+    httpOnly: true,
+    sameSite: "None",
+    secure: process.env.NODE_ENV === "production",
+  });
+  res
+    .status(200)
+    .json({
+      success: true,
+      message: "cookie 'token' removed & Logged out successfully",
+    });
+});
